@@ -50,7 +50,7 @@ class Page
           return false
     )
 
-  load: (url, target, render = 'template') ->
+  load: (url, target, render = 'template', origin_link) ->
     @template_id = new Date().getTime() if render != 'partial'
 
     selector = if target?
@@ -58,7 +58,11 @@ class Page
       this._try_target($target)
       $target.selector
 
+    origin = if origin_link?
+      { url: url, data: origin_link.data() }
+
     History.pushState({
+      origin: origin,
       timestamp: (new Date().getTime()),
       template_id: @template_id,
       render: render,
